@@ -62,7 +62,7 @@ Implement these actions in the backend. Protected actions receive their admin ke
 
 ## Deploy
 
-Build the project with `npm run build`, set `VITE_API_URL` in your hosting provider’s build environment, and deploy the generated `built` folder.
+Build the project with `npm run built` (or `npm run build`); both commands generate the `built` folder. Set `VITE_API_URL` in your hosting provider’s build environment and deploy `built`.
 
 - **Netlify:** configure `VITE_API_URL` and publish the `built` folder. `public/_redirects` is copied into `built` by Vite to support React Router refresh/deep-link navigation.
 
@@ -71,5 +71,5 @@ Build the project with `npm run build`, set `VITE_API_URL` in your hosting provi
 ```sh
 npm install
 npm run dev
-npm run build
+npm run built
 ```

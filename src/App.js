@@ -1,11 +1,12 @@
 import { lazy, Suspense } from 'react'
 import { Link, Navigate, Outlet, Route, Routes } from 'react-router-dom'
-import Spinner from './components/Spinner'
+import { Spinner } from './components/Shared'
+import logo from '../images/logo.png'
 
 function Header() {
   return <header className="bg-gradient-to-r from-ku-900 via-ku-700 to-ku-500 text-white">
     <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-5 sm:px-6">
-      <div aria-label="Kindness Unlimited logo placeholder" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/40 bg-white/10 text-xs font-bold">KU</div>
+      <img className="h-12 w-12 shrink-0 rounded-xl object-contain" src={logo} alt="Kindness Unlimited logo" />
       <Link to="/" className="leading-tight text-white no-underline">
         <span className="block text-lg font-bold">Kindness Unlimited</span>
         <span className="block text-sm text-white/80">Kindness Jam</span>
@@ -30,13 +31,8 @@ function ProtectedRoute({ role }) {
 const Landing = lazy(() => import('./pages/Landing'))
 const Register = lazy(() => import('./pages/Register'))
 const Ticket = lazy(() => import('./pages/Ticket'))
-const MyTicket = lazy(() => import('./pages/MyTicket'))
-const AdminLogin = lazy(() => import('./pages/AdminLogin'))
-const AdminDashboard = lazy(() => import('./pages/AdminDashboard'))
-const AdminOrg = lazy(() => import('./pages/AdminOrg'))
-const AdminScan = lazy(() => import('./pages/AdminScan'))
-const NgoLogin = lazy(() => import('./pages/NgoLogin'))
-const NgoDashboard = lazy(() => import('./pages/NgoDashboard'))
+const Admin = lazy(() => import('./pages/Admin'))
+const Ngo = lazy(() => import('./pages/Ngo'))
 
 function NotFound() {
   return <main className="page-shell mx-auto max-w-xl px-4 py-16 text-center">
@@ -53,16 +49,16 @@ export default function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/r/:orgCode" element={<Register />} />
       <Route path="/ticket/:token" element={<Ticket />} />
-      <Route path="/my-ticket" element={<MyTicket />} />
-      <Route path="/admin/login" element={<AdminLogin />} />
+      <Route path="/my-ticket" element={<Ticket recover />} />
+      <Route path="/admin/login" element={<Admin page="login" />} />
       <Route element={<ProtectedRoute role="admin" />}>
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/org/:orgCode" element={<AdminOrg />} />
-        <Route path="/admin/scan" element={<AdminScan />} />
+        <Route path="/admin" element={<Admin page="dashboard" />} />
+        <Route path="/admin/org/:orgCode" element={<Admin page="org" />} />
+        <Route path="/admin/scan" element={<Admin page="scan" />} />
       </Route>
-      <Route path="/ngo/login" element={<NgoLogin />} />
+      <Route path="/ngo/login" element={<Ngo mode="login" />} />
       <Route element={<ProtectedRoute role="ngo" />}>
-        <Route path="/ngo" element={<NgoDashboard />} />
+        <Route path="/ngo" element={<Ngo mode="dashboard" />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

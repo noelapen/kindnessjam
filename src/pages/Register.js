@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { getOrg, getOrgs } from '../api/client'
 import event from '../config/event'
 import RegistrationForm from '../components/RegistrationForm'
-import Spinner from '../components/Spinner'
+import { Spinner } from '../components/Shared'
 
 function ClosedNotice({ orgName }) {
   return <section className="rounded-2xl border border-amber-200 bg-amber-50 p-6 text-center" role="status">
@@ -91,6 +91,9 @@ export default function Register() {
           ? <ClosedNotice orgName={org.orgName} />
           : org && <RegistrationForm orgCode={org.orgCode} orgName={org.orgName} />}
       </section>}
-    <p className="mt-5 text-center text-sm"><Link className="font-semibold text-ku-700 underline" to="/">Back to event page</Link></p>
+    <div className="mt-5 flex flex-col items-center gap-3">
+      <Link className="secondary-button" to="/my-ticket">Already Registered (My Ticket)</Link>
+      <Link className="text-sm font-semibold text-ku-700 underline" to="/">Back to event page</Link>
+    </div>
   </main>
 }

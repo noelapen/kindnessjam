@@ -1,13 +1,42 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { ngoRegistrations } from '../api/client'
-import DataTable from '../components/DataTable'
-import Spinner from '../components/Spinner'
-import StatCard from '../components/StatCard'
+import { ngoLogin, ngoRegistrations } from '../api/client'
+import LoginForm from '../components/LoginForm'
+import { DataTable, Spinner, StatCard } from '../components/Shared'
 import { downloadCsv } from '../utils/download'
 
-export default function NgoDashboard() {
+const columns = [
+  { key: 'regNo', label: 'Reg No' },
+  { key: 'name', label: 'Name' },
+  { key: 'phone', label: 'Phone' },
+  { key: 'checkedIn', label: 'Checked-in', render: (row) => row.checkedIn ? 'Yes' : 'No' },
+]
+
+function NgoLogin() {
+  const navigate = useNavigate()
+
+  async function signIn({ orgCode, passcode }) {
+    const code = orgCode.trim()
+    const result = await ngoLogin(code, passcode)
+    if (result?.ok === false) throw new Error('Organisation code or passcode was not accepted.')
+    sessionStorage.setItem('kindnessJamNgo', JSON.stringify({ orgCode: code, passcode }))
+    navigate('/ngo', { replace: true })
+  }
+
+  return <LoginForm
+    title="Volunteer / organisation login"
+    description="Sign in with your organisation code and passcode to view its registrations."
+    errorMessage="Could not sign in."
+    onSubmit={signIn}
+    fields={[
+      { id: 'org-code', name: 'orgCode', label: 'Organisation code', autoComplete: 'username' },
+      { id: 'org-passcode', name: 'passcode', label: 'Passcode', type: 'password', autoComplete: 'current-password' },
+    ]}
+  />
+}
+
+function NgoDashboard() {
   const navigate = useNavigate()
   const session = useMemo(() => {
     try { return JSON.parse(sessionStorage.getItem('kindnessJamNgo') || 'null') } catch { return null }
@@ -35,14 +64,11 @@ export default function NgoDashboard() {
   useEffect(() => { load() }, [load])
 
   const rows = result?.registrations || []
-  const filtered = rows.filter((row) => !query.trim() || [row.regNo, row.name, row.phone].some((value) => String(value || '').toLowerCase().includes(query.trim().toLowerCase())))
+  const search = query.trim().toLowerCase()
+  const filtered = rows.filter((row) => !search || [row.regNo, row.name, row.phone].some((value) => String(value || '').toLowerCase().includes(search)))
   const quota = result?.quota ?? result?.org?.quota ?? '—'
   const used = result?.used ?? result?.registered ?? result?.org?.used ?? rows.length
   const remaining = result?.remaining ?? result?.org?.remaining ?? (Number.isFinite(Number(quota)) ? Math.max(0, Number(quota) - Number(used)) : '—')
-  const columns = [
-    { key: 'regNo', label: 'Reg No' }, { key: 'name', label: 'Name' }, { key: 'phone', label: 'Phone' },
-    { key: 'checkedIn', label: 'Checked-in', render: (row) => row.checkedIn ? 'Yes' : 'No' },
-  ]
   return <main className="page-shell mx-auto max-w-6xl px-4 py-8 sm:px-6">
     <div className="flex flex-wrap items-center justify-between gap-3"><div><h1 className="text-3xl font-bold text-ku-900">Organisation dashboard</h1><p className="mt-1 text-sm text-slate-600">Your organisation: {result?.orgName || result?.org?.orgName || session?.orgCode}</p></div>
       <button className="secondary-button" onClick={() => { sessionStorage.removeItem('kindnessJamNgo'); navigate('/ngo/login', { replace: true }) }}>Sign out</button>
@@ -58,4 +84,8 @@ export default function NgoDashboard() {
       {loading ? <Spinner label="Loading your registrations…" /> : <DataTable columns={columns} rows={filtered} emptyMessage={query ? 'No registrations match your search.' : 'No registrations yet.'} />}
     </section>
   </main>
+}
+
+export default function Ngo({ mode }) {
+  return mode === 'login' ? <NgoLogin /> : <NgoDashboard />
 }

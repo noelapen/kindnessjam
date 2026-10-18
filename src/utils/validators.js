@@ -1,6 +1,5 @@
 export const normalizePhone = (value) => value.replace(/\D/g, '')
 export const isValidPhone = (value) => /^\d{10}$/.test(normalizePhone(value))
-export const isValidEmail = (value) => !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())
 
 export function createOrgCode(name) {
   const base = name.normalize('NFKD').replace(/[\u0300-\u036f]/g, '')

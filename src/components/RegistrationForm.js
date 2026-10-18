@@ -3,7 +3,7 @@ import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 import { register } from '../api/client'
 import { isValidPhone, normalizePhone } from '../utils/validators'
-import Spinner from './Spinner'
+import { Spinner } from './Shared'
 
 export default function RegistrationForm({ orgCode, orgName }) {
   const [form, setForm] = useState({ name: '', phone: '' })

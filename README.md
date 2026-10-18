@@ -29,7 +29,7 @@ Implement these actions in the backend. Protected actions receive their admin ke
 | --- | --- | --- |
 | `getOrgs` | — | Active organisations with `orgCode`, `orgName`, `type`, `quota`, `used`, `remaining`, `open` |
 | `getOrg` | `orgCode` | One organisation with the fields above |
-| `register` | `orgCode`, `name`, `phone`, `email` | `{ regNo, token }` |
+| `register` | `orgCode`, `name`, `phone` | `{ regNo, token }` |
 | `getTicket` | `token` | `{ regNo, name, orgName, checkedIn, checkedInAt }` |
 | `findByPhone` | `phone` | `{ token }` |
 | `adminLogin` | `adminKey` | `{ ok }` |

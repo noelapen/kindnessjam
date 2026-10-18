@@ -14,7 +14,7 @@ const event = {
     { orgName: 'Rotaract / Rotary', quota: 50 },
     { orgName: 'Bhoomi', quota: 50 },
     { orgName: 'DLLE', quota: 50 },
-    { orgName: 'KU Guest / wellwishers', quota: 100 },
+    { orgName: 'KU Guest / wellwishers', quota: 300 },
     { orgName: 'Snehavardhani', quota: 100 },
     { orgName: 'The Kind Citizen', quota: 15 },
     { orgName: 'IMMUN', quota: 7 },

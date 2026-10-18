@@ -5,11 +5,14 @@ import logo from '../images/logo.png'
 
 function Header() {
   return <header className="bg-gradient-to-r from-ku-900 via-ku-700 to-ku-500 text-white">
-    <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-5 sm:px-6">
-      <img className="h-12 w-12 shrink-0 rounded-xl object-contain" src={logo} alt="Kindness Unlimited logo" />
+    <div className="border-b border-white/15 bg-ku-900/40 px-4 py-2 text-center text-xs font-semibold tracking-[0.18em] text-white/90">
+      KINDNESS JAM <span className="px-1 text-white/50">·</span> MUSIC, MOVEMENT & COMMUNITY
+    </div>
+    <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-4 sm:px-6">
+      <img className="h-12 w-12 shrink-0 rounded-xl bg-white object-contain p-1" src={logo} alt="Kindness Unlimited logo" />
       <Link to="/" className="leading-tight text-white no-underline">
-        <span className="block text-lg font-bold">Kindness Unlimited</span>
-        <span className="block text-sm text-white/80">Kindness Jam</span>
+        <span className="block text-xl font-extrabold tracking-tight sm:text-2xl">Kindness Jam</span>
+        <span className="block text-xs font-medium text-white/75">by Kindness Unlimited</span>
       </Link>
     </div>
   </header>
@@ -25,10 +28,9 @@ function Footer() {
 
 function ProtectedRoute({ role }) {
   const key = role === 'admin' ? 'kindnessJamAdmin' : 'kindnessJamNgo'
-  return sessionStorage.getItem(key) ? <Outlet /> : <Navigate to={role === 'admin' ? '/admin/login' : '/ngo/login'} replace />
+  return sessionStorage.getItem(key) ? <Outlet /> : <Navigate to={role === 'admin' ? '/' : '/ngo/login'} replace />
 }
 
-const Landing = lazy(() => import('./pages/Landing'))
 const Register = lazy(() => import('./pages/Register'))
 const Ticket = lazy(() => import('./pages/Ticket'))
 const Admin = lazy(() => import('./pages/Admin'))
@@ -45,12 +47,12 @@ export default function App() {
     <Header />
     <Suspense fallback={<main className="page-shell flex justify-center px-4 py-12 text-ku-700"><Spinner label="Loading page…" /></main>}>
     <Routes>
-      <Route path="/" element={<Landing />} />
+      <Route path="/" element={<Admin page="login" />} />
       <Route path="/register" element={<Register />} />
       <Route path="/r/:orgCode" element={<Register />} />
       <Route path="/ticket/:token" element={<Ticket />} />
       <Route path="/my-ticket" element={<Ticket recover />} />
-      <Route path="/admin/login" element={<Admin page="login" />} />
+      <Route path="/admin/login" element={<Navigate to="/" replace />} />
       <Route element={<ProtectedRoute role="admin" />}>
         <Route path="/admin" element={<Admin page="dashboard" />} />
         <Route path="/admin/org/:orgCode" element={<Admin page="org" />} />

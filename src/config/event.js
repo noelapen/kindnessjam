@@ -5,6 +5,7 @@ const event = {
   time: 'Time to be announced',
   venue: 'DPC Ground, St. Andrews Road, Bandra West, Mumbai',
   participantSheetUrl: 'https://docs.google.com/spreadsheets/d/16PaRAT3IFZkxd_tljgwBkXjWRicdlxIZdyahxZiwJ58/edit?usp=sharing',
+  guestAttractions: [],
   organizations: [
     { orgName: 'Goonj', quota: 50 },
     { orgName: 'Samporna Shiksha', quota: 50 },

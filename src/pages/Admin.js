@@ -26,8 +26,8 @@ function AdminLogin() {
   }
 
   return <LoginForm
-    title="Admin Login"
-    description="Enter your authorized event-team key to continue."
+    title="Kindness Jam admin"
+    description="Sign in to manage organisation registrations and welcome guests on event day."
     errorMessage="Could not sign in."
     onSubmit={signIn}
     fields={[
@@ -171,7 +171,6 @@ function AdminDashboard() {
         <div className="flex flex-wrap gap-2">
           <button className="rounded-lg bg-ku-700 px-3 py-2 text-xs font-semibold text-white" onClick={() => save(org)}>Save</button>
           <button className="rounded-lg border border-ku-100 px-3 py-2 text-xs font-semibold text-ku-700" onClick={() => { navigator.clipboard.writeText(link).then(() => toast.success('Registration link copied.')).catch(() => toast.error('Could not copy the link.')) }}>Copy link</button>
-          <a className="rounded-lg border border-ku-100 px-3 py-2 text-xs font-semibold text-ku-700" href={`https://wa.me/?text=${encodeURIComponent(`Register for Kindness Jam: ${link}`)}`} target="_blank" rel="noreferrer">WhatsApp</a>
         </div>
       </div>
     } },

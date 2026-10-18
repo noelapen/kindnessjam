@@ -47,9 +47,11 @@ Implement these actions in the backend. Protected actions receive their admin ke
 ## Event and branding
 
 - Update date, time, and venue in [`src/config/event.js`](src/config/event.js); this is the single event-details configuration file.
+- The root URL (`/`) is the event-team admin sign-in. After signing in, use the dashboard's per-organisation **Copy link** action to share that organisation's separate `/r/{orgCode}` registration page.
+- Add guest attraction images by placing image files in `public/` and adding entries such as `{ name: 'Guest performer', image: '/guest-performer.jpg' }` to `guestAttractions` in `src/config/event.js`. Until images are configured, registration pages show three branded image placeholders.
 - The event-team dashboard's participant-sheet link is configured as `participantSheetUrl` in the same file. The linked Google Sheet must enforce its own access permissions.
 - The volunteer registration dropdown roster and requested quotas are listed in `event.organizations` in `src/config/event.js`. An organization must also exist in the Apps Script `getOrgs` response with a matching name and valid `orgCode` before its registration option is enabled; frontend entries do not create backend or spreadsheet records.
-- Replace the marked text placeholder in the header with the official logo when available. The asset drop location is [`src/assets/`](src/assets/).
+- The event logo shown in the header is `images/logo.png`.
 - Update the palette and font in `tailwind.config.js` and `index.html` if the brand changes.
 
 ## Admin and privacy

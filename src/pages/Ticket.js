@@ -33,7 +33,7 @@ function TicketRecovery() {
         <div><label className="field-label" htmlFor="recovery-phone">Phone number</label><input className="field" id="recovery-phone" type="tel" inputMode="numeric" autoComplete="tel" required value={phone} onChange={(event) => setPhone(event.target.value)} /></div>
         <button className="primary-button w-full" disabled={loading}>{loading ? <Spinner label="Searching…" /> : 'Find my ticket'}</button>
       </form>
-      <p className="mt-5 text-center text-sm"><Link className="font-semibold text-ku-700 underline" to="/">Back to event page</Link></p>
+      <p className="mt-5 text-center text-sm"><Link className="font-semibold text-ku-700 underline" to="/register">Back to registration</Link></p>
     </section>
   </main>
 }
@@ -66,27 +66,13 @@ function TicketDetails() {
     } finally { setDownloading(false) }
   }
 
-  async function share() {
-    const url = window.location.href
-    try {
-      if (navigator.share) await navigator.share({ title: 'My Kindness Jam ticket', url })
-      else {
-        await navigator.clipboard.writeText(url)
-        toast.success('Ticket link copied.')
-      }
-    } catch (shareError) {
-      if (shareError.name !== 'AbortError') toast.error('Could not share the ticket link.')
-    }
-  }
-
   if (loading) return <main className="page-shell px-4 py-12 text-center text-ku-700"><Spinner label="Loading your ticket…" /></main>
   if (error) return <main className="page-shell mx-auto max-w-xl px-4 py-12"><div className="surface p-6 text-center"><p className="text-red-800" role="alert">{error}</p><Link to="/my-ticket" className="primary-button mt-5">Recover ticket</Link></div></main>
   return <main className="page-shell mx-auto max-w-3xl px-4 py-8 sm:py-10">
     <TicketCard ticket={ticket} cardRef={cardRef} />
-    <div className="mx-auto mt-5 grid max-w-xl gap-3 sm:grid-cols-3">
+    <div className="mx-auto mt-5 grid max-w-xl gap-3 sm:grid-cols-2">
       <button className="primary-button" disabled={downloading} onClick={() => download(() => downloadElementPng(cardRef.current, `KindnessJam-${ticket.regNo}.png`))}>{downloading ? 'Preparing…' : 'Download Ticket (PNG)'}</button>
       <button className="secondary-button" disabled={downloading} onClick={() => download(() => downloadElementPdf(cardRef.current, `KindnessJam-${ticket.regNo}.pdf`))}>{downloading ? 'Preparing…' : 'Download Ticket (PDF)'}</button>
-      <button className="secondary-button" onClick={share}>Share link</button>
     </div>
   </main>
 }

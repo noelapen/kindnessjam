@@ -26,7 +26,9 @@ export default function RegistrationForm({ orgCode, orgName }) {
         name: form.name.trim(),
         phone: normalizePhone(form.phone),
       })
-      if (!result?.token) throw new Error('Registration succeeded but no ticket token was returned. Please contact the event team.')
+      if (!result?.regNo || !result?.token) {
+        throw new Error('The registration service did not return both a registration number and ticket QR. Please contact the event team.')
+      }
       localStorage.setItem('kindnessJamTicketToken', result.token)
       navigate(`/ticket/${encodeURIComponent(result.token)}`)
     } catch (error) {

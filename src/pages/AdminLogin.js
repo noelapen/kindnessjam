@@ -20,7 +20,7 @@ export default function AdminLogin() {
     finally { setLoading(false) }
   }
   return <main className="page-shell mx-auto max-w-md px-4 py-12"><section className="surface p-6 sm:p-8">
-    <h1 className="text-2xl font-bold text-ku-900">KU Admin login</h1><p className="mt-2 text-sm text-slate-600">Enter your admin key to continue.</p>
+    <h1 className="text-2xl font-bold text-ku-900">admin login</h1><p className="mt-2 text-sm text-slate-600">Enter your authorized event-team key to continue.</p>
     <form className="mt-6 space-y-5" onSubmit={submit}><div><label className="field-label" htmlFor="admin-key">Admin key</label><input className="field" id="admin-key" type="password" autoComplete="current-password" required value={key} onChange={(event) => setKey(event.target.value)} /></div><button className="primary-button w-full" disabled={loading}>{loading ? <Spinner label="Signing in…" /> : 'Sign in'}</button></form>
   </section></main>
 }

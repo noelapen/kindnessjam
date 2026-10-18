@@ -50,6 +50,7 @@ export default function App() {
     <Suspense fallback={<main className="page-shell flex justify-center px-4 py-12 text-ku-700"><Spinner label="Loading page…" /></main>}>
     <Routes>
       <Route path="/" element={<Landing />} />
+      <Route path="/register" element={<Register />} />
       <Route path="/r/:orgCode" element={<Register />} />
       <Route path="/ticket/:token" element={<Ticket />} />
       <Route path="/my-ticket" element={<MyTicket />} />

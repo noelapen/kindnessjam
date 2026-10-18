@@ -42,11 +42,13 @@ Implement these actions in the backend. Protected actions receive their admin ke
 | `verify` | `adminKey`, `token` | `{ status, name, orgName, regNo, checkedInAt }`, where status is `ALLOWED`, `USED`, or `INVALID` |
 | `lookupRegNo` | `adminKey`, `regNo` | `{ token }` for the matching registration |
 
-`register` must enforce active status, registration deadline, per-organisation quota, duplicate phone prevention, and atomic quota accounting using Apps Script `LockService`. The Apps Script service must generate an unpredictable UUID token for every successful registration. QR verification sends the secret QR value using `token`. Manual scanner lookup first calls `lookupRegNo` to obtain the secret token, then calls `verify` with that token; registration numbers and QR tokens are different values.
+`register` must enforce active status, registration deadline, per-organisation quota, duplicate phone prevention, and atomic quota accounting using Apps Script `LockService`. For every successful registration, the Apps Script service must assign a unique registration number and generate a separate unpredictable UUID token. QR verification sends the secret QR value using `token`. Manual scanner lookup first calls `lookupRegNo` to obtain the secret token, then calls `verify` with that token; registration numbers and QR tokens are different values.
 
 ## Event and branding
 
 - Update date, time, and venue in [`src/config/event.js`](src/config/event.js); this is the single event-details configuration file.
+- The event-team dashboard's participant-sheet link is configured as `participantSheetUrl` in the same file. The linked Google Sheet must enforce its own access permissions.
+- The volunteer registration dropdown roster and requested quotas are listed in `event.organizations` in `src/config/event.js`. An organization must also exist in the Apps Script `getOrgs` response with a matching name and valid `orgCode` before its registration option is enabled; frontend entries do not create backend or spreadsheet records.
 - Replace the marked text placeholder in the header with the official logo when available. The asset drop location is [`src/assets/`](src/assets/).
 - Update the palette and font in `tailwind.config.js` and `index.html` if the brand changes.
 
@@ -54,14 +56,15 @@ Implement these actions in the backend. Protected actions receive their admin ke
 
 - KU admin and NGO credentials are held in `sessionStorage` for the current browser tab. The admin key is sent only to Apps Script; it is not stored in source code.
 - Public routes only call public API actions. Admin and NGO routes are protected in the frontend, and sensitive data must also be authorized by the backend on every request.
+- Student ticket recovery currently uses the registered phone number via `findByPhone`; this is ticket recovery, not account authentication. The Apps Script backend must provide and enforce student authentication before this can be treated as a protected student account.
+- The volunteer entry point currently uses the existing admin-key login. A separate volunteer role requires server-side authorization support in Apps Script; frontend route protection alone is not sufficient.
 - NGOs receive their org code and passcode from the administrator. Treat these credentials as secrets.
 
 ## Deploy
 
-Build the project with `npm run build`, set `VITE_API_URL` in your hosting provider’s build environment, and deploy the generated `dist` folder.
+Build the project with `npm run build`, set `VITE_API_URL` in your hosting provider’s build environment, and deploy the generated `built` folder.
 
-- **Vercel:** import the project, configure the `VITE_API_URL` environment variable, and deploy. `vercel.json` rewrites application routes to Vite’s entry point for refresh/deep-link support.
-- **Netlify:** deploy `dist`, configure `VITE_API_URL`, and use `public/_redirects` (copied into `dist` by Vite) for React Router refresh/deep-link support.
+- **Netlify:** configure `VITE_API_URL` and publish the `built` folder. `public/_redirects` is copied into `built` by Vite to support React Router refresh/deep-link navigation.
 
 ## Commands
 

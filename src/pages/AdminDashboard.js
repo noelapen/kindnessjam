@@ -5,6 +5,7 @@ import { addOrg, adminSummary, updateOrg } from '../api/client'
 import DataTable from '../components/DataTable'
 import Spinner from '../components/Spinner'
 import StatCard from '../components/StatCard'
+import event from '../config/event'
 
 function ProgressBar({ used = 0, quota = 0 }) {
   const percentage = quota > 0 ? Math.min(100, Math.round((used / quota) * 100)) : 0
@@ -152,7 +153,12 @@ export default function AdminDashboard() {
   if (loading) return <main className="page-shell px-4 py-12 text-ku-700"><Spinner label="Loading dashboard…" /></main>
   return <main className="page-shell mx-auto max-w-7xl px-4 py-8 sm:px-6">
     <div className="flex flex-wrap items-center justify-between gap-3"><div><h1 className="text-3xl font-bold text-ku-900">KU Admin dashboard</h1><p className="mt-1 text-sm text-slate-600">Organisation and event registration overview</p></div>
-      <div className="flex gap-2"><Link className="secondary-button" to="/admin/scan">Open entry scanner</Link><button className="secondary-button" onClick={() => refresh(true)} disabled={refreshing}>{refreshing ? 'Refreshing…' : 'Refresh'}</button><button className="secondary-button" onClick={() => { sessionStorage.removeItem('kindnessJamAdmin'); navigate('/admin/login', { replace: true }) }}>Sign out</button></div>
+      <div className="flex flex-wrap gap-2">
+        <a className="secondary-button" href={event.participantSheetUrl} target="_blank" rel="noreferrer">View participant sheet</a>
+        <Link className="primary-button" to="/admin/scan">Scan QR for attendance</Link>
+        <button className="secondary-button" onClick={() => refresh(true)} disabled={refreshing}>{refreshing ? 'Refreshing…' : 'Refresh'}</button>
+        <button className="secondary-button" onClick={() => { sessionStorage.removeItem('kindnessJamAdmin'); navigate('/admin/login', { replace: true }) }}>Sign out</button>
+      </div>
     </div>
     {error && <p className="mt-5 rounded-xl bg-red-50 p-4 text-sm text-red-800" role="alert">{error} <button className="font-semibold underline" onClick={() => refresh()}>Retry</button></p>}
     <section className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">

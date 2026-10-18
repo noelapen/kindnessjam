@@ -1,5 +1,6 @@
 node_modules
 dist
+built
 .env
 .env.local
 .DS_Store

@@ -173,13 +173,13 @@ export default function Register() {
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-ku-600">VENUE</p>
             <p className="mt-1 text-sm font-semibold text-slate-800">
-              DPC Ground, St. Andrews Road, Bandra West, Mumbai
+              D'Monte Park, St. Andrews Road, Bandra West, Mumbai
             </p>
           </div>
         </div>
         <div className="mt-5">
           <a
-            href="https://www.google.com/maps/search/?api=1&query=DPC+Ground+St+Andrews+Road+Bandra+West+Mumbai"
+            href="https://maps.app.goo.gl/LQjSThtRdpREZHReA"
             target="_blank"
             rel="noopener noreferrer"
             className="secondary-button inline-flex items-center justify-center text-sm"

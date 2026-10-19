@@ -1,7 +1,7 @@
 import event from '../config/event'
 
 export default function EventDetails({ ticket = false }) {
-  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.venue)}`
+  const mapUrl = `https://maps.app.goo.gl/LQjSThtRdpREZHReA`
   const containerClass = ticket
     ? 'mt-5 rounded-2xl border border-white/20 bg-white/10 p-4 text-white'
     : 'surface mb-6 p-5 sm:p-6'

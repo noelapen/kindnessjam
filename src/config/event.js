@@ -2,8 +2,8 @@
 const event = {
   name: 'Kindness Jam',
   date: '28th November, 2026',
-  time: 'Time to be announced',
-  venue: "D'Monte Park, St. Andrews Road, Bandra West",
+  time: '3:30pm',
+  venue: "D.P.R.C (D'Monte Park Recreation Center), St Andrews Rd, Bandra West, Mumbai",
   participantSheetUrl: 'https://docs.google.com/spreadsheets/d/16PaRAT3IFZkxd_tljgwBkXjWRicdlxIZdyahxZiwJ58/edit?usp=sharing',
   guestAttractions: [],
   organizations: [

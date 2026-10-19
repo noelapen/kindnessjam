@@ -168,25 +168,30 @@ export default function Register() {
           </div>
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-ku-600">TIME</p>
-            <p className="mt-1 text-sm font-semibold text-slate-800">Timings will be announced soon</p>
+            <p className="mt-1 text-sm font-semibold text-slate-800">3:30pm</p>
           </div>
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-ku-600">VENUE</p>
             <p className="mt-1 text-sm font-semibold text-slate-800">
-              D'Monte Park, St. Andrews Road, Bandra West, Mumbai
+              D.P.R.C (D'Monte Park Recreation Center), St Andrews Rd, Bandra West, Mumbai
             </p>
+            <a
+              href="https://maps.app.goo.gl/LQjSThtRdpREZHReA"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="secondary-button mt-4 inline-flex items-center justify-center text-sm"
+            >
+              Get directions
+            </a>
           </div>
         </div>
-        <div className="mt-5">
-          <a
-            href="https://maps.app.goo.gl/LQjSThtRdpREZHReA"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="secondary-button inline-flex items-center justify-center text-sm"
-          >
-            Get directions
-          </a>
-        </div>
+        {org && Number.isFinite(remaining) && Number.isFinite(Number(org.quota)) && (
+          <div className="mt-5 rounded-2xl border border-ku-200 bg-[#f3ecf9] px-4 py-3 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
+            <p className="text-base font-semibold italic text-ku-900 sm:text-lg">
+              {org.orgName} · {remaining} of {org.quota} places remaining
+            </p>
+          </div>
+        )}
       </section>
 
       {/* Registration Selection & Form */}
@@ -224,14 +229,6 @@ export default function Register() {
                 </p>
               )}
             </div>
-          )}
-          {org && (
-            <p className="mb-4 text-sm text-slate-600">
-              {org.orgName}
-              {Number.isFinite(remaining) && Number.isFinite(Number(org.quota))
-                ? ` · ${remaining} of ${org.quota} places remaining`
-                : ''}
-            </p>
           )}
           {closed ? (
             <ClosedNotice orgName={org.orgName} />

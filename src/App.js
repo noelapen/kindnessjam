@@ -10,9 +10,9 @@ function Header() {
     </div>
     <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-4 sm:px-6">
       <img className="h-12 w-12 shrink-0 rounded-xl bg-white object-contain p-1" src={logo} alt="Kindness Unlimited logo" />
-      <Link to="/" className="leading-tight text-white no-underline">
-        <span className="block text-xl font-extrabold tracking-tight sm:text-2xl">Kindness Jam</span>
-        <span className="block text-xs font-medium text-white/75">by Kindness Unlimited</span>
+      <Link to="/" className="leading-none text-white no-underline">
+        <span className="block whitespace-nowrap font-sora text-[1.35rem] font-extrabold leading-[1.05] tracking-[-0.045em] sm:text-3xl">Kindness Jam</span>
+        <span className="mt-1 block font-inter text-[10px] font-medium leading-tight tracking-[0.04em] text-white/75 sm:text-xs">by Kindness Unlimited</span>
       </Link>
     </div>
   </header>

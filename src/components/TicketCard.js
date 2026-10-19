@@ -71,7 +71,7 @@ export default function TicketCard({ ticket, qrRef, cardRef }) {
       <span aria-hidden="true" className="absolute -left-4 top-0 h-8 w-8 -translate-y-1/2 rounded-full bg-[#f5edff]" />
       <span aria-hidden="true" className="absolute -right-4 top-0 h-8 w-8 -translate-y-1/2 rounded-full bg-[#f5edff]" />
       {ticket.checkedIn && <p className="mb-3 rounded-full bg-green-100 px-4 py-2 text-sm font-bold text-green-800">Checked in ✅</p>}
-      <span className="mb-4 rounded-full border border-[#e7c9ff] bg-[#f4e8ff] px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-[#6a2da2]">Admit one · scan to enter</span>
+      <span className="mb-4 rounded-full border border-[#e7c9ff] bg-[#f4e8ff] px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-[#6a2da2]">scan to enter</span>
       <div ref={qrRef} className="rounded-[1.4rem] border border-[#e6d5f8] bg-white p-2.5 shadow-[0_12px_32px_rgba(76,31,120,0.12)]">
         <canvas ref={canvasRef} aria-label="Unique ticket QR code" />
       </div>

@@ -16,6 +16,8 @@ export default {
       },
       fontFamily: {
         sans: ['Poppins', 'sans-serif'],
+        sora: ['Sora', 'sans-serif'],
+        inter: ['Inter', 'sans-serif'],
       },
       boxShadow: {
         soft: '0 14px 45px rgba(46, 16, 101, 0.10)',

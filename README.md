@@ -19,7 +19,7 @@ A mobile-first React 18 and Vite registration frontend for Kindness Unlimited. T
 
 3. Open the URL printed by Vite. Create a production build with `npm run build`.
 
-The Apps Script deployment must allow the site to call it and return JSON responses with the shape `{ "ok": true, "data": ... }` or `{ "ok": false, "error": "..." }`. POST requests send JSON in the body with `Content-Type: text/plain;charset=utf-8` to avoid a browser preflight request.
+The Apps Script deployment must allow the site to call it and return JSON responses with the shape `{ "ok": true, "data": ... }` or `{ "ok": false, "error": "..." }`. It is the interface between the app and the Google Sheet: organization details and registration records must be read from and written to the sheet by the Apps Script actions. The frontend does not keep a separate organization roster or registration dataset. POST requests send JSON in the body with `Content-Type: text/plain;charset=utf-8` to avoid a browser preflight request.
 
 ## Apps Script API contract
 
@@ -50,7 +50,7 @@ Implement these actions in the backend. Protected actions receive their admin ke
 - The root URL (`/`) is the event-team admin sign-in. After signing in, use the dashboard's per-organisation **Copy link** action to share that organisation's separate `/r/{orgCode}` registration page.
 - Add guest attraction images by placing image files in `public/` and adding entries such as `{ name: 'Guest performer', image: '/guest-performer.jpg' }` to `guestAttractions` in `src/config/event.js`. Until images are configured, registration pages show three branded image placeholders.
 - The event-team dashboard's participant-sheet link is configured as `participantSheetUrl` in the same file. The linked Google Sheet must enforce its own access permissions.
-- The volunteer registration dropdown roster and requested quotas are listed in `event.organizations` in `src/config/event.js`. An organization must also exist in the Apps Script `getOrgs` response with a matching name and valid `orgCode` before its registration option is enabled; frontend entries do not create backend or spreadsheet records.
+- The volunteer registration dropdown is populated directly from the Apps Script `getOrgs` response, including organization names and quotas from the Google Sheet. Registrations, participant views, and registration totals are loaded through the Apps Script API; keep the sheet and Apps Script as the source of truth.
 - The event logo shown in the header is `images/logo.png`.
 - Update the palette and font in `tailwind.config.js` and `index.html` if the brand changes.
 

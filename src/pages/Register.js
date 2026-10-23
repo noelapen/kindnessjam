@@ -27,7 +27,6 @@ export default function Register() {
   const { orgCode: routeOrgCode } = useParams()
   const [orgCode, setOrgCode] = useState(routeOrgCode || '')
   const [orgs, setOrgs] = useState([])
-  const [unconfiguredOrgNames, setUnconfiguredOrgNames] = useState([])
   const [org, setOrg] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -47,15 +46,11 @@ export default function Register() {
         })
       : getOrgs().then((result) => {
           const list = Array.isArray(result) ? result : result?.orgs
-          if (!Array.isArray(list)) throw new Error('The organisation list is unavailable.')
-          const normalizeName = (name) => String(name).toLowerCase().replace(/[^a-z0-9]/g, '')
-          const configuredOrgs = event.organizations.map((item) => ({
-            ...item,
-            backendOrg: list.find((backendOrg) => normalizeName(backendOrg.orgName) === normalizeName(item.orgName)),
-          }))
+          if (!Array.isArray(list) || list.some((item) => !item?.orgCode || !item?.orgName)) {
+            throw new Error('The organisation list is unavailable.')
+          }
           if (active) {
-            setOrgs(configuredOrgs)
-            setUnconfiguredOrgNames(configuredOrgs.filter((item) => !item.backendOrg).map((item) => item.orgName))
+            setOrgs(list)
             setOrgCode('')
           }
         })
@@ -73,7 +68,7 @@ export default function Register() {
 
   function selectOrg(code) {
     setOrgCode(code)
-    setOrg(orgs.find((item) => item.backendOrg?.orgCode === code)?.backendOrg || null)
+    setOrg(orgs.find((item) => item.orgCode === code) || null)
   }
 
   if (loading) {
@@ -213,21 +208,16 @@ export default function Register() {
               >
                 <option value="">Choose your organisation</option>
                 {orgs.map((item) => (
-                  <option key={item.orgName} value={item.backendOrg?.orgCode || ''} disabled={!item.backendOrg}>
+                  <option key={item.orgCode} value={item.orgCode}>
                     {item.orgName} · Quota: {item.quota}
-                    {item.backendOrg?.open === false
-                      ? ' — Registration closed / full'
-                      : !item.backendOrg
-                      ? ' — Setup required'
+                    {item.open === false || item.active === false
+                      ? ' — Registration closed'
+                      : Number(item.remaining ?? (Number(item.quota) - Number(item.used))) <= 0
+                      ? ' — Full'
                       : ''}
                   </option>
                 ))}
               </select>
-              {unconfiguredOrgNames.length > 0 && (
-                <p className="mt-3 rounded-xl bg-amber-50 p-3 text-sm text-amber-900" role="status">
-                  These organizations are shown with their requested quotas, but registration is not enabled until they are added to the registration service: {unconfiguredOrgNames.join(', ')}.
-                </p>
-              )}
             </div>
           )}
           {closed ? (

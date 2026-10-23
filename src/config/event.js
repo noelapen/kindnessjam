@@ -6,20 +6,6 @@ const event = {
   venue: "D.P.R.C (D'Monte Park Recreation Center), St Andrews Rd, Bandra West, Mumbai",
   participantSheetUrl: 'https://docs.google.com/spreadsheets/d/16PaRAT3IFZkxd_tljgwBkXjWRicdlxIZdyahxZiwJ58/edit?usp=sharing',
   guestAttractions: [],
-  organizations: [
-    { orgName: 'Goonj', quota: 50 },
-    { orgName: 'Samporna Shiksha', quota: 50 },
-    { orgName: 'iVolunteer', quota: 50 },
-    { orgName: 'Connect For', quota: 50 },
-    { orgName: 'Rotaract / Rotary', quota: 50 },
-    { orgName: 'Bhoomi', quota: 50 },
-    { orgName: 'DLLE', quota: 50 },
-    { orgName: 'KU Guest / wellwishers', quota: 300 },
-    { orgName: 'Snehavardhani', quota: 100 },
-    { orgName: 'The Kind Citizen', quota: 15 },
-    { orgName: 'IMMUN', quota: 7 },
-    { orgName: 'Aseema', quota: 10 },
-  ],
 }
 
 export default event

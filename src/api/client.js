@@ -49,3 +49,30 @@ export async function verifyRegistrationNumber(adminKey, regNo) {
   if (!lookup?.token) throw new Error('No ticket was found for that registration number.')
   return verifyTicketToken(adminKey, lookup.token)
 }
+
+// ── Email confirmation (calls the email server, not GAS) ───────────────────
+const EMAIL_API_URL = import.meta.env.VITE_EMAIL_API_URL || ''
+
+export async function sendConfirmationEmail({ email, name, regNo, token }) {
+  if (!EMAIL_API_URL) {
+    console.warn('Email service not configured (VITE_EMAIL_API_URL is empty). Skipping email.')
+    return { ok: false, emailStatus: 'not_configured' }
+  }
+  try {
+    const response = await fetch(`${EMAIL_API_URL}/api/send-confirmation-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, name, regNo, token }),
+    })
+    const result = await response.json()
+    return result
+  } catch (err) {
+    console.error('Email send error:', err)
+    return { ok: false, emailStatus: 'failed', error: err.message }
+  }
+}
+
+export async function resendConfirmationEmail({ email, name, regNo, token }) {
+  return sendConfirmationEmail({ email, name, regNo, token })
+}
+

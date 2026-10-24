@@ -7,6 +7,7 @@ import {
   adminLogin,
   adminOrgRegistrations,
   adminSummary,
+  resendConfirmationEmail,
   updateOrg,
   verifyRegistrationNumber,
   verifyTicketToken,
@@ -225,19 +226,37 @@ function AdminOrg() {
     return () => { mounted = false }
   }, [adminKey, orgCode])
   useEffect(() => load(), [load])
+  const [resending, setResending] = useState({})
+  async function handleResendEmail(row) {
+    if (!row.email || !row.token) return toast.error('This registration has no email or ticket token to resend.')
+    setResending((prev) => ({ ...prev, [row.regNo]: true }))
+    try {
+      const result = await resendConfirmationEmail({ email: row.email, name: row.name, regNo: row.regNo, token: row.token })
+      if (result?.ok) toast.success(`Email resent to ${row.email}`)
+      else toast.error(result?.error || 'Email could not be sent.')
+    } catch { toast.error('Email resend failed.') }
+    finally { setResending((prev) => ({ ...prev, [row.regNo]: false })) }
+  }
   const filtered = useMemo(() => {
     const value = query.trim().toLowerCase()
-    return rows.filter((row) => !value || [row.regNo, row.name, row.phone].some((item) => String(item || '').toLowerCase().includes(value)))
+    return rows.filter((row) => !value || [row.regNo, row.name, row.phone, row.email].some((item) => String(item || '').toLowerCase().includes(value)))
   }, [rows, query])
   const columns = [
     { key: 'regNo', label: 'Reg No' }, { key: 'name', label: 'Name' }, { key: 'phone', label: 'Phone' },
+    { key: 'email', label: 'Email', render: (row) => row.email || '—' },
+    { key: 'emailStatus', label: 'Email Status', render: (row) => {
+      const st = row.emailStatus || '—'
+      const styles = st === 'sent' ? 'bg-green-100 text-green-800' : st === 'failed' ? 'bg-red-100 text-red-800' : 'bg-slate-100 text-slate-600'
+      return st === '—' ? '—' : <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${styles}`}>{st}</span>
+    }},
     // { key: 'registeredAt', label: 'Registered at', render: (row) => row.registeredAt || row.registered_at || '—' },
     { key: 'checkedIn', label: 'Checked-in', render: (row) => row.checkedIn ? `Yes${row.checkedInAt ? ` · ${row.checkedInAt}` : ''}` : 'No' },
+    { key: 'resend', label: 'Actions', render: (row) => row.email ? <button className="rounded-lg bg-ku-700 px-3 py-1.5 text-xs font-semibold text-white disabled:opacity-50" disabled={resending[row.regNo]} onClick={() => handleResendEmail(row)}>{resending[row.regNo] ? 'Sending…' : 'Resend email'}</button> : '—' },
   ]
   return <main className="page-shell mx-auto max-w-7xl px-4 py-8 sm:px-6">
     <Link className="text-sm font-semibold text-ku-700 underline" to="/admin">← Back to dashboard</Link>
     <div className="mt-4 flex flex-wrap items-end justify-between gap-3"><div><h1 className="text-3xl font-bold text-ku-900">Organisation registrations</h1><p className="mt-1 text-sm text-slate-600">{orgCode}</p></div>
-      <div className="flex w-full gap-2 sm:w-auto"><label className="sr-only" htmlFor="registration-search">Search registrations</label><input className="field mt-0 min-w-0" id="registration-search" placeholder="Search names, reg no, phone…" value={query} onChange={(event) => setQuery(event.target.value)} /><button className="secondary-button shrink-0" disabled={!filtered.length} onClick={() => {
+      <div className="flex w-full gap-2 sm:w-auto"><label className="sr-only" htmlFor="registration-search">Search registrations</label><input className="field mt-0 min-w-0" id="registration-search" placeholder="Search names, reg no, phone, email…" value={query} onChange={(event) => setQuery(event.target.value)} /><button className="secondary-button shrink-0" disabled={!filtered.length} onClick={() => {
         try { downloadCsv(`KindnessJam-${orgCode}.csv`, filtered, columns.map(({ key, label }) => ({ key, label }))) } catch { toast.error('Could not download CSV.') }
       }}>Download CSV</button></div>
     </div>

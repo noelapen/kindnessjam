@@ -1,3 +1,6 @@
+// src/utils/download.js
+import { toPng } from 'html-to-image'
+
 function escapeCell(value) {
   const text = value == null ? '' : String(value)
   return `"${text.replace(/"/g, '""')}"`
@@ -19,34 +22,54 @@ export function downloadCsv(filename, rows, columns) {
   URL.revokeObjectURL(url)
 }
 
-async function renderElement(element) {
+async function captureElement(element) {
   if (!element) throw new Error('Nothing is available to download.')
-  const { default: html2canvas } = await import('html2canvas')
-  return html2canvas(element, { scale: 3, useCORS: true, backgroundColor: '#ffffff' })
+
+  if (document.fonts && document.fonts.ready) {
+    await document.fonts.ready
+  }
+
+  // Measure exact full dimensions
+  const width = element.offsetWidth || 410
+  const height = element.offsetHeight
+
+  return toPng(element, {
+    pixelRatio: 3,
+    cacheBust: true,
+    width: width,        // Forces full horizontal capture width
+    height: height,      // Forces full vertical capture height
+    style: {
+      margin: '0',       // Resets auto-margin shifting during capture
+      transform: 'none', // Prevents CSS transform offsets
+    },
+  })
 }
 
 export async function downloadElementPng(element, filename) {
-  const canvas = await renderElement(element)
+  const dataUrl = await captureElement(element)
   const link = document.createElement('a')
   link.download = filename
-  link.href = canvas.toDataURL('image/png')
+  link.href = dataUrl
   link.click()
 }
 
 export async function downloadElementPdf(element, filename) {
-  const canvas = await renderElement(element)
+  const dataUrl = await captureElement(element)
   const { jsPDF } = await import('jspdf')
   const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' })
+
+  const rect = element.getBoundingClientRect()
   const margin = 28
   const pageWidth = pdf.internal.pageSize.getWidth()
   const pageHeight = pdf.internal.pageSize.getHeight()
+  
   const scale = Math.min(
-    (pageWidth - margin * 2) / canvas.width,
-    (pageHeight - margin * 2) / canvas.height,
+    (pageWidth - margin * 2) / rect.width,
+    (pageHeight - margin * 2) / rect.height,
   )
-  const width = canvas.width * scale
-  const height = canvas.height * scale
+  const width = rect.width * scale
+  const height = rect.height * scale
 
-  pdf.addImage(canvas.toDataURL('image/png'), 'PNG', (pageWidth - width) / 2, (pageHeight - height) / 2, width, height)
+  pdf.addImage(dataUrl, 'PNG', (pageWidth - width) / 2, (pageHeight - height) / 2, width, height)
   pdf.save(filename)
 }

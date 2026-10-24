@@ -68,13 +68,29 @@ function TicketDetails() {
 
   if (loading) return <main className="page-shell px-4 py-12 text-center text-ku-700"><Spinner label="Loading your ticket…" /></main>
   if (error) return <main className="page-shell mx-auto max-w-xl px-4 py-12"><div className="surface p-6 text-center"><p className="text-red-800" role="alert">{error}</p><Link to="/my-ticket" className="primary-button mt-5">Recover ticket</Link></div></main>
-  return <main className="page-shell mx-auto max-w-3xl px-4 py-8 sm:py-10">
-    <TicketCard ticket={ticket} cardRef={cardRef} />
-    <div className="mx-auto mt-5 grid max-w-xl gap-3 sm:grid-cols-2">
-      <button className="primary-button" disabled={downloading} onClick={() => download(() => downloadElementPng(cardRef.current, `KindnessJam-${ticket.regNo}.png`))}>{downloading ? 'Preparing…' : 'Download Ticket (PNG)'}</button>
-      <button className="secondary-button" disabled={downloading} onClick={() => download(() => downloadElementPdf(cardRef.current, `KindnessJam-${ticket.regNo}.pdf`))}>{downloading ? 'Preparing…' : 'Download Ticket (PDF)'}</button>
-    </div>
-  </main>
+  return (
+    <main className="page-shell mx-auto max-w-3xl px-4 py-8 sm:py-10">
+      <TicketCard ticket={ticket} cardRef={cardRef} />
+      
+      {/* Downsized buttons container */}
+      <div className="mx-auto mt-5 grid max-w-md gap-2.5 sm:grid-cols-2">
+        <button 
+          className="primary-button py-2.5 px-4 text-sm font-semibold" 
+          disabled={downloading} 
+          onClick={() => download(() => downloadElementPng(cardRef.current, `KindnessJam-${ticket.regNo}.png`))}
+        >
+          {downloading ? 'Preparing…' : 'Download Ticket (Image)'}
+        </button>
+        <button 
+          className="secondary-button py-2.5 px-4 text-sm font-semibold" 
+          disabled={downloading} 
+          onClick={() => download(() => downloadElementPdf(cardRef.current, `KindnessJam-${ticket.regNo}.pdf`))}
+        >
+          {downloading ? 'Preparing…' : 'Download Ticket (PDF)'}
+        </button>
+      </div>
+    </main>
+  )
 }
 
 export default function Ticket({ recover = false }) {

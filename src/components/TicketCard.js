@@ -1,92 +1,324 @@
 import { useEffect, useRef, useState } from 'react'
 import QRCode from 'qrcode'
-import EventDetails from './EventDetails'
-import jamImage from '../../images/jam img.jpeg'
+
+// Local Assets
+import logoImg from '../../images/logo.png'
+import iraImg from '../../images/irakhan.png'
+import anshuImg from '../../images/anshu.png'
+import anishriyaImg from '../../images/anishriya.png'
 
 export default function TicketCard({ ticket, qrRef, cardRef }) {
   const [qrError, setQrError] = useState('')
   const canvasRef = useRef(null)
 
+  const passId = ticket?.regNo
+    ? ticket.regNo.startsWith('KJ-')
+      ? ticket.regNo
+      : `KJ-${ticket.regNo}`
+    : 'KJ-0002'
+
   useEffect(() => {
     let active = true
-    QRCode.toCanvas(canvasRef.current, ticket.token, {
-      errorCorrectionLevel: 'H',
-      width: 360,
-      margin: 2,
-      color: { dark: '#2E1065', light: '#FFFFFF' },
+    const qrData = ticket?.token || ticket?.regNo || 'KINDNESS-JAM'
+
+    QRCode.toCanvas(canvasRef.current, qrData, {
+      errorCorrectionLevel: 'M',
+      width: 108,
+      margin: 1.5,
+      color: { dark: '#000000', light: '#FFFFFF' },
     }).then(() => {
       if (active) setQrError('')
     }).catch((error) => {
-      if (active) setQrError(error.message || 'Could not create the ticket QR code.')
+      if (active) setQrError(error.message || 'QR error')
     })
+
     return () => { active = false }
-  }, [ticket.token])
+  }, [ticket?.token, ticket?.regNo])
 
-  return <article ref={cardRef} className="mx-auto max-w-[760px] overflow-hidden rounded-[2rem] border border-white bg-[#fbf8ff] shadow-[0_28px_80px_rgba(62,25,111,0.22)]">
-    <header className="relative isolate min-h-[180px] overflow-hidden bg-[#4c1fa5] px-6 py-7 sm:min-h-[210px] sm:px-10 sm:py-8">
-      <img className="absolute inset-0 -z-20 h-full w-full object-cover object-center" src={jamImage} alt="" />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-[#32116f]/90 via-[#5421a4]/70 to-[#7b2db8]/30" />
-      <div className="absolute -right-10 -top-16 -z-10 h-48 w-48 rounded-full border border-white/20 sm:h-64 sm:w-64" />
-      <div className="absolute -right-2 -top-8 -z-10 h-32 w-32 rounded-full border border-white/15 sm:h-44 sm:w-44" />
-      <svg aria-hidden="true" className="absolute bottom-0 right-4 h-16 w-32 text-white/30 sm:right-8 sm:h-20 sm:w-40" viewBox="0 0 160 56" fill="none">
-        <path d="M2 29h13l7-13 12 29 11-38 12 48 12-38 10 24 9-12h11l6-10 9 22 10-30 12 38 9-20h13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-      <div className="relative max-w-xl text-white">
-        <p className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-white/80">Your event pass</p>
-        <h1 className="mt-2 text-[2.2rem] font-black leading-[0.98] tracking-[-0.06em] sm:text-5xl">Kindness Jam</h1>
-        <p className="mt-3 text-[10px] font-bold uppercase tracking-[0.22em] text-white/85 sm:text-xs">Music <span className="px-1 text-[#ff8bd5]">·</span> Movement <span className="px-1 text-[#ff8bd5]">·</span> Community</p>
-      </div>
-      <div aria-hidden="true" className="absolute bottom-4 right-6 flex gap-1 sm:right-10">
-        <span className="h-1.5 w-1.5 rounded-full bg-[#ff87d2]" />
-        <span className="h-1.5 w-1.5 rounded-full bg-white/75" />
-        <span className="h-1.5 w-1.5 rounded-full bg-[#ffd174]" />
-      </div>
-    </header>
+  return (
+    <article
+      ref={cardRef}
+      style={{
+        width: '410px',
+        margin: '0 auto',
+        backgroundColor: '#0F33C4',
+        borderRadius: '26px',
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+        color: '#ffffff',
+        fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      }}
+      className="shadow-2xl"
+    >
+      {/* Blue Poster Body */}
+      <div style={{ padding: '24px 22px 14px 22px' }}>
+        
+        {/* ROW 1: Header Brand & KU Logo */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ 
+            fontSize: '11px', 
+            fontWeight: 800, 
+            letterSpacing: '0.05em', 
+            lineHeight: '15px', 
+            textTransform: 'uppercase' 
+          }}>
+            KINDNESS UNLIMITED<br />PRESENTS
+          </div>
 
-    <section className="bg-gradient-to-br from-[#5823a5] via-[#57228d] to-[#40176f] px-6 py-6 text-white sm:px-10 sm:py-8">
-      <p className="inline-flex rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[11px] font-semibold text-white/85">
-        Presented by Kindness Unlimited
-      </p>
-
-      <div className="mt-6 grid gap-5 sm:grid-cols-[1fr_auto] sm:items-end">
-        <div className="min-w-0">
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#e7caff]">Participant</p>
-          <p className="mt-1 break-words text-2xl font-black leading-tight tracking-[-0.04em] sm:text-3xl">{ticket.name}</p>
+          <div style={{ 
+            width: '64px', 
+            height: '54px', 
+            backgroundColor: '#ffffff', 
+            borderRadius: '10px', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            padding: '3px', 
+            boxSizing: 'border-box', 
+            flexShrink: 0 
+          }}>
+            <img 
+              src={logoImg} 
+              alt="Kindness Unlimited" 
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }} 
+            />
+          </div>
         </div>
-        <div className="w-fit min-w-36 rounded-2xl border border-white/20 bg-[#32135d]/45 px-4 py-3 sm:text-right">
-          <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#e7caff]">Pass ID</p>
-          <p className="mt-1 font-mono text-lg font-bold tracking-[0.08em] text-white">{ticket.regNo}</p>
+
+        {/* ROW 2: Title and Date Box */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginTop: '12px' }}>
+          <div>
+            <div style={{ fontSize: '35px', fontWeight: 900, lineHeight: '36px', letterSpacing: '-0.02em' }}>
+              The Kindness Jam
+              <span style={{ color: '#D4F634' }}> 2026</span>
+            </div>
+
+            {/* Registered Attendee Pill */}
+            <div style={{ 
+              marginTop: '10px', 
+              display: 'inline-flex', 
+              alignItems: 'center', 
+              gap: '6px', 
+              backgroundColor: 'rgba(255, 255, 255, 0.16)', 
+              border: '1px solid rgba(255, 255, 255, 0.25)', 
+              padding: '3px 10px', 
+              borderRadius: '6px' 
+            }}>
+              <span style={{ fontSize: '8.5px', fontWeight: 800, textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.75)', letterSpacing: '0.04em' }}>
+                PASS FOR:
+              </span>
+              <span style={{ fontSize: '12px', fontWeight: 800, color: '#ffffff' }}>
+                {ticket?.name || 'Guest Pass'}
+              </span>
+            </div>
+          </div>
+
+          {/* Green Date Box (Enlarged) */}
+          <div style={{ 
+            backgroundColor: '#D4F634', 
+            color: '#000000', 
+            width: '100px', 
+            padding: '10px 6px', 
+            borderRadius: '8px', 
+            textAlign: 'center', 
+            boxSizing: 'border-box', 
+            flexShrink: 0, 
+            marginTop: '2px' 
+          }}>
+            <div style={{ fontSize: '13px', fontWeight: 900, lineHeight: '14px', letterSpacing: '0.06em' }}>
+              NOV
+            </div>
+            <div style={{ fontSize: '38px', fontWeight: 900, lineHeight: '36px', margin: '4px 0 3px 0' }}>
+              28
+            </div>
+            <div style={{ fontSize: '9px', fontWeight: 900, lineHeight: '11px', whiteSpace: 'nowrap' }}>
+              SAT, 3:30 PM
+            </div>
+          </div>
         </div>
+
+        {/* 3 Circular Artists Row */}
+        <div style={{ marginTop: '18px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', textAlign: 'center' }}>
+          {/* Ira Khan */}
+          <div>
+            <div style={{ width: '70px', height: '70px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)', overflow: 'hidden', margin: '0 auto', backgroundColor: '#e2e8f0' }}>
+              <img src={iraImg} alt="Ira Khan" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+            <div style={{ fontSize: '13px', fontWeight: 800, marginTop: '6px', lineHeight: '15px' }}>Ira Khan</div>
+            <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.85)', lineHeight: '12px', marginTop: '2px' }}>Founder & CEO<br />Agatsu Foundation</div>
+          </div>
+
+          {/* Anshu Gupta */}
+          <div>
+            <div style={{ width: '70px', height: '70px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)', overflow: 'hidden', margin: '0 auto', backgroundColor: '#e2e8f0' }}>
+              <img src={anshuImg} alt="Anshu Gupta" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+            <div style={{ fontSize: '13px', fontWeight: 800, marginTop: '6px', lineHeight: '15px' }}>Anshu Gupta</div>
+            <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.85)', lineHeight: '12px', marginTop: '2px' }}>Founder of Goonj</div>
+          </div>
+
+          {/* Anish and Riya */}
+          <div>
+            <div style={{ width: '70px', height: '70px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)', overflow: 'hidden', margin: '0 auto', backgroundColor: '#e2e8f0' }}>
+              <img src={anishriyaImg} alt="Anish and Riya" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+            <div style={{ fontSize: '13px', fontWeight: 800, marginTop: '6px', lineHeight: '15px' }}>Anish and Riya</div>
+            <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.85)', lineHeight: '12px', marginTop: '2px' }}>Acapella - Beat Box<br />Better Halves</div>
+          </div>
+        </div>
+
+        {/* ...and many more artists Banner */}
+        <div style={{ 
+          marginTop: '16px', 
+          backgroundColor: '#D4F634', 
+          color: '#000000', 
+          padding: '6px', 
+          borderRadius: '4px', 
+          textAlign: 'center', 
+          fontWeight: 900, 
+          fontSize: '14px', 
+          letterSpacing: '-0.01em', 
+          lineHeight: '18px' 
+        }}>
+          ...and many more artists
+        </div>
+
+        {/* Bottom Section: Venue & Partner (Left) vs Coral Pass (Right) */}
+        <div style={{ marginTop: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+          
+          {/* Venue & Partner */}
+          <div style={{ flex: 1, paddingRight: '4px' }}>
+            <div style={{ 
+              fontSize: '11px', 
+              fontWeight: 900, 
+              textTransform: 'uppercase', 
+              letterSpacing: '0.03em', 
+              lineHeight: '15px' 
+            }}>
+              AN EVENING OF MUSIC, FUN<br />& CELEBRATION
+            </div>
+
+            <div style={{ 
+              marginTop: '9px', 
+              fontSize: '11px', 
+              lineHeight: '15px', 
+              color: 'rgba(255,255,255,0.95)' 
+            }}>
+              <span style={{ fontWeight: 800 }}>Venue:</span> D’monte Park Recreation Club Ground, St. Andrew’s Road, Bandra West, Mumbai
+            </div>
+
+            <div style={{ marginTop: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '10px', color: 'rgba(255,255,255,0.9)', lineHeight: '12px' }}>
+                Communication partner:
+              </span>
+              <span style={{ 
+                backgroundColor: '#ffffff', 
+                color: '#000000', 
+                padding: '2px 7px', 
+                borderRadius: '4px', 
+                fontSize: '10px', 
+                fontWeight: 900, 
+                lineHeight: '13px', 
+                display: 'inline-block' 
+              }}>
+                #Schbang.
+              </span>
+            </div>
+          </div>
+
+          {/* Coral QR Pass Box */}
+          <div 
+            ref={qrRef}
+            style={{ 
+              backgroundColor: '#FA7B62', 
+              borderRadius: '20px', 
+              padding: '9px 10px 8px 10px', 
+              textAlign: 'center', 
+              flexShrink: 0, 
+              width: '140px', 
+              boxSizing: 'border-box' 
+            }}
+          >
+            <div style={{ fontSize: '8.5px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.04em', lineHeight: '11px' }}>
+              PASS ID: {passId}
+            </div>
+            
+            {/* Square Inner QR Box */}
+            <div style={{ 
+              backgroundColor: '#ffffff', 
+              borderRadius: '2px', 
+              padding: '4px', 
+              margin: '5px auto', 
+              width: '112px', 
+              height: '112px', 
+              boxSizing: 'border-box', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center' 
+            }}>
+              <canvas ref={canvasRef} style={{ width: '104px', height: '104px', display: 'block' }} />
+            </div>
+
+            {qrError && <div style={{ fontSize: '7px', color: '#ffffff' }}>{qrError}</div>}
+
+            <div style={{ fontSize: '8.5px', fontWeight: 900, color: '#ffffff', letterSpacing: '0.04em', lineHeight: '11px' }}>
+              SCAN TO ENTER
+            </div>
+          </div>
+
+        </div>
+
       </div>
 
-      <div className="mt-5 border-t border-white/15 pt-4">
-        <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#e7caff]">Organisation</p>
-        <p className="mt-1 break-words text-base font-bold leading-snug">{ticket.orgName}</p>
+      {/* Undulating Wavy Edge Divider */}
+      <div style={{ position: 'relative', width: '100%', overflow: 'hidden', lineHeight: 0, marginBottom: '-1px' }}>
+        <svg 
+          viewBox="0 0 500 45" 
+          preserveAspectRatio="none" 
+          style={{ position: 'relative', display: 'block', width: '100%', height: '22px', color: '#D4F634' }}
+        >
+          <path 
+            d="M0,20 C150,45 350,-5 500,20 L500,45 L0,45 Z" 
+            fill="currentColor" 
+          />
+        </svg>
       </div>
 
-      <EventDetails ticket />
-    </section>
+      {/* Yellow Footer */}
+      <footer style={{ 
+        backgroundColor: '#D4F634', 
+        color: '#000000', 
+        padding: '10px 14px 16px 14px', 
+        textAlign: 'center' 
+      }}>
+        <div style={{ fontSize: '10px', fontWeight: 900, letterSpacing: '0.02em', lineHeight: '12px' }}>
+          THE FUN STARTS AT 3:30 PM!!!
+        </div>
+        <div style={{ fontSize: '8.5px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.01em', margin: '3px 0 5px 0', lineHeight: '11px' }}>
+          LET US ALL CELEBRATE UNDER THE OPEN SKY
+        </div>
 
-    <section className="ticket-stub relative flex flex-col items-center bg-[#fbf8ff] px-5 py-6 text-center sm:py-7" aria-label="Ticket entry QR code">
-      <span aria-hidden="true" className="absolute -left-4 top-0 h-8 w-8 -translate-y-1/2 rounded-full bg-[#f5edff]" />
-      <span aria-hidden="true" className="absolute -right-4 top-0 h-8 w-8 -translate-y-1/2 rounded-full bg-[#f5edff]" />
-      {ticket.checkedIn && <p className="mb-3 rounded-full bg-green-100 px-4 py-2 text-sm font-bold text-green-800">Checked in ✅</p>}
-      <span className="mb-4 rounded-full border border-[#e7c9ff] bg-[#f4e8ff] px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-[#6a2da2]">scan to enter</span>
-      <div ref={qrRef} className="rounded-[1.4rem] border border-[#e6d5f8] bg-white p-2.5 shadow-[0_12px_32px_rgba(76,31,120,0.12)]">
-        <canvas ref={canvasRef} aria-label="Unique ticket QR code" />
-      </div>
-      {qrError && <p className="mt-2 text-sm text-red-700" role="alert">{qrError}</p>}
-      <p className="mt-4 text-sm font-extrabold text-[#45206c]">Your all-access kindness pass</p>
-      <p className="mt-1 text-xs text-[#786b86]">Keep it handy and show your QR at the entrance.</p>
-      <div className="mt-5 w-full max-w-md rounded-2xl border border-[#e8dcf4] bg-gradient-to-br from-white to-[#f8efff] p-4 text-left">
-        <h2 className="text-sm font-extrabold text-[#45206c]">Pack your festival essentials ✨</h2>
-        <p className="mt-1 text-xs text-[#786b86]">It’s outdoors—bring along:</p>
-        <ul className="mt-3 grid gap-2 text-xs font-semibold text-[#514361] sm:grid-cols-2">
-          <li className="flex items-center gap-2 rounded-xl bg-white/80 px-3 py-2"><span aria-hidden="true" className="text-base">🧢</span><span>Hat or cap</span></li>
-          <li className="flex items-center gap-2 rounded-xl bg-white/80 px-3 py-2"><span aria-hidden="true" className="text-base">💧</span><span>Water bottle</span></li>
-          <li className="flex items-center gap-2 rounded-xl bg-white/80 px-3 py-2 sm:col-span-2"><span aria-hidden="true" className="text-base">🧺</span><span>Towel, picnic mat, or newspaper for sitting on the grass</span></li>
-        </ul>
-      </div>
-    </section>
-  </article>
+        <div style={{ 
+          fontSize: '8px', 
+          fontWeight: 800, 
+          display: 'flex', 
+          flexWrap: 'wrap', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          gap: '3px', 
+          lineHeight: '13px' 
+        }}>
+          <span>AND DO NOT FORGET YOUR:</span>
+          <span style={{ backgroundColor: 'rgba(0,0,0,0.08)', padding: '1px 4px', borderRadius: '3px' }}>HAT ✅</span>
+          <span style={{ backgroundColor: 'rgba(0,0,0,0.08)', padding: '1px 4px', borderRadius: '3px' }}>MAT ✅</span>
+          <span style={{ backgroundColor: 'rgba(0,0,0,0.08)', padding: '1px 4px', borderRadius: '3px' }}>WATER ✅</span>
+          <span style={{ backgroundColor: 'rgba(0,0,0,0.08)', padding: '1px 4px', borderRadius: '3px' }}>KIND HEART ✅✅</span>
+        </div>
+
+        <div style={{ marginTop: '6px', fontSize: '9px', fontWeight: 900, letterSpacing: '0.06em', textTransform: 'uppercase', lineHeight: '11px' }}>
+          SEE YOU THERE!!
+        </div>
+      </footer>
+    </article>
+  )
 }

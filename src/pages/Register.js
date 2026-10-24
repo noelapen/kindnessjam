@@ -6,10 +6,14 @@ import RegistrationForm from '../components/RegistrationForm'
 import { Spinner } from '../components/Shared'
 import jamImage from '../../images/jam img.jpeg'
 
+import iraImg from '../../images/irakhan.png'
+import anshuImg from '../../images/anshu.png'
+import anishriyaImg from '../../images/anishriya.png'
+
 const guestAttractions = [
-  { name: "Guest Name 1", role: "", image: "" },
-  { name: "Guest Name 2", role: "", image: "" },
-  { name: "Guest Name 3", role: "", image: "" },
+  { name: "Ira Khan", role: "Founder & CEO Agatsu Foundation", image: iraImg, position: "center 15%" },
+  { name: "Anshu Gupta", role: "Founder of Goonj", image: anshuImg, position: "center 10%" },
+  { name: "Anish and Riya", role: "Acapella - Beat Box", image: anishriyaImg },
 ]
 
 function ClosedNotice({ orgName }) {
@@ -116,25 +120,39 @@ export default function Register() {
 
       {/* Special Guests Section */}
       <section className="mb-6" aria-labelledby="attractions-heading">
-        <div className="mb-4">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-ku-600">WHAT'S IN STORE</p>
-          <h2 className="mt-1 text-xl font-bold text-ku-900" id="attractions-heading">
+        {/* Section Header */}
+        <div className="mb-5">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-ku-600">
+            WHAT'S IN STORE
+          </p>
+          <h2 className="mt-1 text-2xl font-bold tracking-tight text-ku-900" id="attractions-heading">
             Meet our special guests
           </h2>
-          <p className="mt-1 text-sm text-slate-600">
+          <p className="mt-1.5 text-sm leading-relaxed text-slate-600">
             An unforgettable day of music, movement and community, with surprises from people who believe in kindness as much as you do.
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+
+        {/* Guest Cards Grid */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {guestAttractions.map((guest, index) => (
-            <article className="overflow-hidden rounded-2xl bg-white shadow-soft" key={`${guest.name}-${index}`}>
+            <article
+              className="flex flex-col overflow-hidden rounded-2xl bg-white shadow-soft"
+              key={`${guest.name}-${index}`}
+            >
               {guest.image ? (
-                <img className="aspect-[4/3] w-full object-cover" src={guest.image} alt={guest.name} />
+                <div className="aspect-[4/3] w-full overflow-hidden bg-slate-100">
+                  <img
+                    className="h-full w-full object-cover"
+                    style={{ objectPosition: guest.position || 'center center' }}
+                    src={guest.image}
+                    alt={guest.name}
+                  />
+                </div>
               ) : (
                 <div
-                  className={`flex aspect-[4/3] items-center justify-center bg-gradient-to-br ${
-                    ['from-fuchsia-500 to-ku-900', 'from-orange-400 to-pink-600', 'from-ku-500 to-cyan-500'][index % 3]
-                  }`}
+                  className={`flex aspect-[4/3] items-center justify-center bg-gradient-to-br ${['from-fuchsia-500 to-ku-900', 'from-orange-400 to-pink-600', 'from-ku-500 to-cyan-500'][index % 3]
+                    }`}
                   aria-label={`${guest.name} image space`}
                 >
                   <span className="rounded-full border border-white/60 bg-black/10 px-2.5 py-1 text-center text-[10px] font-bold uppercase tracking-wider text-white sm:text-xs">
@@ -142,12 +160,22 @@ export default function Register() {
                   </span>
                 </div>
               )}
-              <div className="px-3 py-2.5 text-center">
-                <p className="truncate text-xs font-semibold text-ku-900 sm:text-sm">{guest.name}</p>
-                {guest.role && <p className="truncate text-[11px] text-slate-500 sm:text-xs">{guest.role}</p>}
+
+              <div className="flex flex-1 flex-col justify-center px-3 py-3.5 text-center">
+                <p className="text-sm font-bold text-ku-900">{guest.name}</p>
+                {guest.role && (
+                  <p className="mt-0.5 text-xs font-medium text-slate-500">{guest.role}</p>
+                )}
               </div>
             </article>
           ))}
+        </div>
+
+        {/* ...and many more artists text banner */}
+        <div className="mt-6 text-center">
+          <span className="text-xs font-extrabold uppercase tracking-[0.18em] text-ku-600 sm:text-sm">
+            ...AND MANY MORE ARTISTS
+          </span>
         </div>
       </section>
 

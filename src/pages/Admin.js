@@ -228,11 +228,11 @@ function AdminOrg() {
   useEffect(() => load(), [load])
   const [resending, setResending] = useState({})
   async function handleResendEmail(row) {
-    if (!row.email || !row.token) return toast.error('This registration has no email or ticket token to resend.')
+    if (!row.email) return toast.error('This registration has no email address to resend to.')
     setResending((prev) => ({ ...prev, [row.regNo]: true }))
     try {
-      const result = await resendConfirmationEmail({ email: row.email, name: row.name, regNo: row.regNo, token: row.token })
-      if (result?.ok) toast.success(`Email resent to ${row.email}`)
+      const result = await resendConfirmationEmail(adminKey, row.regNo)
+      if (result?.sent) toast.success(`Email resent to ${row.email}`)
       else toast.error(result?.error || 'Email could not be sent.')
     } catch { toast.error('Email resend failed.') }
     finally { setResending((prev) => ({ ...prev, [row.regNo]: false })) }

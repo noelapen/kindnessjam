@@ -8,7 +8,8 @@
     "build": "vite build",
     "built": "vite build",
     "preview": "vite preview",
-    "email-server": "node server/email-server.js"
+    "email-server": "node server/email-server.js",
+    "test": "node --test"
   },
   "dependencies": {
     "cors": "^2.8.5",

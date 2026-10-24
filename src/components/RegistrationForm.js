@@ -1,13 +1,14 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
-import { register, sendConfirmationEmail } from '../api/client'
+import { register } from '../api/client'
 import { isValidPhone, isValidEmail, normalizePhone } from '../utils/validators'
 import { Spinner } from './Shared'
 
 export default function RegistrationForm({ orgCode, orgName }) {
   const [form, setForm] = useState({ name: '', phone: '', email: '' })
   const [loading, setLoading] = useState(false)
+  const submitting = useRef(false)
   const navigate = useNavigate()
   const update = (key) => (event) => setForm((current) => ({
     ...current,
@@ -16,13 +17,14 @@ export default function RegistrationForm({ orgCode, orgName }) {
 
   async function submit(event) {
     event.preventDefault()
+    if (submitting.current) return
     if (!form.name.trim()) return toast.error('Enter your full name.')
     if (!isValidEmail(form.email)) return toast.error('Enter a valid email address.')
     if (!isValidPhone(form.phone)) return toast.error('Enter a valid 10-digit phone number.')
 
+    submitting.current = true
     setLoading(true)
     try {
-      // Step 1: Register (saves to spreadsheet — never fails silently)
       const result = await register({
         orgCode,
         name: form.name.trim(),
@@ -34,29 +36,19 @@ export default function RegistrationForm({ orgCode, orgName }) {
       }
       localStorage.setItem('kindnessJamTicketToken', result.token)
 
-      // Step 2: Send confirmation email (non-blocking — registration is already saved)
-      sendConfirmationEmail({
-        email: form.email.trim(),
-        name: form.name.trim(),
-        regNo: result.regNo,
-        token: result.token,
-      }).then((emailResult) => {
-        if (emailResult?.ok) {
-          toast.success('Confirmation email sent! Check your inbox 📧')
-        } else if (emailResult?.emailStatus === 'not_configured') {
-          // Email service not set up — silent (no error shown to user)
-        } else {
-          toast('Registration saved! Email could not be sent — you can download your ticket from the ticket page.', { icon: '⚠️', duration: 6000 })
-        }
-      }).catch(() => {
-        toast('Registration saved! Email could not be sent — download your ticket instead.', { icon: '⚠️', duration: 6000 })
-      })
-
-      // Navigate immediately — don't wait for email
+      if (result.emailSent === true) {
+        toast.success('Registration complete! Confirmation email sent — check your inbox.')
+      } else {
+        toast('Registration succeeded, but email delivery failed. Your ticket is available here; please contact the event team for help.', {
+          icon: '⚠️',
+          duration: 8000,
+        })
+      }
       navigate(`/ticket/${encodeURIComponent(result.token)}`)
     } catch (error) {
       toast.error(error.message || 'Registration could not be completed.')
     } finally {
+      submitting.current = false
       setLoading(false)
     }
   }

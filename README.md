@@ -51,19 +51,9 @@ The Apps Script implementation must save the email during `register`, send the c
 
 The Apps Script sends through `MailApp.sendEmail()` using the Google account that executes the script. The website does not make a second SMTP/email-service request. After registration, the UI uses the `emailSent` value returned by Apps Script; administrators retry using the protected `resendTicketEmail` action.
 
-To authorize mail sending, open the Apps Script project and run a mail authorization helper manually from the editor as the account that should send the messages. Accept Google's mail permission prompt. The supplied script's `testEmail()` calls the normal ticket sender with `row: 1`, which can overwrite the `EmailStatus` header; do not run that version. For a safe authorization check, temporarily use:
+To send the requested message and attach a personalized ticket PDF, replace the existing Apps Script `sendTicketEmail(t)` with the implementation in [`apps-script/email-ticket-update.gs`](apps-script/email-ticket-update.gs), and add its helper functions. Existing `register` and `resendTicketEmail` call `sendTicketEmail` already, so their call sites do not need changes. Every send builds the ticket with that registration's name, registration number, and QR token. The PDF uses the blue, lime, and coral event-ticket layout, includes the event and guest details, and contains the attendee's QR code; the temporary document is trashed after it is attached. To include the logo and guest photos, add optional `TicketLogoURL`, `IraImageURL`, `AnshuImageURL`, and `AnishRiyaImageURL` rows to the Apps Script Settings sheet, with publicly fetchable image URLs. If those are absent, the personalized PDF still includes the ticket details, guest names, and QR. The email body contains the supplied confirmation message without an extra ticket link.
 
-```js
-function authorizeMail() {
-  MailApp.sendEmail(
-    Session.getActiveUser().getEmail(),
-    'Kindness Jam mail authorization check',
-    'Mail permission is authorized.'
-  );
-}
-```
-
-Run `authorizeMail` once and accept the prompt, then remove the helper if desired. Deploy the web app to **execute as the script owner** so registrants do not need to authorize mail themselves. Update the deployment to a new version after script changes. If the project has an explicit `appsscript.json` OAuth scope list, include the Apps Script send-mail scope (`https://www.googleapis.com/auth/script.send_mail`) alongside scopes required for its spreadsheet and URL-fetch operations.
+Run `authorizeTicketEmailServices()` once from the Apps Script editor as the account that should send the messages, and accept Google's requested mail, document, Drive, and external-request permissions. This helper sends a one-time authorization check to the active account and removes its temporary document. Deploy the web app to **execute as the script owner** so registrants do not need to authorize mail themselves. Update the deployment to a new version after script changes. If the project has an explicit `appsscript.json` OAuth scope list, include `https://www.googleapis.com/auth/script.send_mail`, `https://www.googleapis.com/auth/documents`, `https://www.googleapis.com/auth/drive`, and `https://www.googleapis.com/auth/script.external_request`, along with scopes required for its spreadsheet operations.
 
 Set `VITE_API_URL` in local `.env` and the frontend hosting build environment. No SMTP credentials, `REGISTRATION_API_URL`, or `VITE_EMAIL_API_URL` are needed for this Apps Script mail flow. Keep mail authorization in the script owner's account and do not ask registrants to authorize sending.
 

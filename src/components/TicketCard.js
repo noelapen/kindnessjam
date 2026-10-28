@@ -5,6 +5,7 @@ import QRCode from 'qrcode'
 import logoImg from '../../images/logo.png'
 import iraImg from '../../images/irakhan.png'
 import anshuImg from '../../images/anshu.png'
+import avantiImg from '../../images/awanti.jpeg'
 import anishriyaImg from '../../images/anishriya.png'
 
 export default function TicketCard({ ticket, qrRef, cardRef }) {
@@ -137,8 +138,8 @@ export default function TicketCard({ ticket, qrRef, cardRef }) {
           </div>
         </div>
 
-        {/* 3 Circular Artists Row */}
-        <div style={{ marginTop: '18px', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', textAlign: 'center' }}>
+        {/* Circular Artists Row */}
+        <div style={{ marginTop: '18px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '4px', textAlign: 'center' }}>
           {/* Ira Khan */}
           <div>
             <div style={{ width: '70px', height: '70px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)', overflow: 'hidden', margin: '0 auto', backgroundColor: '#e2e8f0' }}>
@@ -155,6 +156,15 @@ export default function TicketCard({ ticket, qrRef, cardRef }) {
             </div>
             <div style={{ fontSize: '13px', fontWeight: 800, marginTop: '6px', lineHeight: '15px' }}>Anshu Gupta</div>
             <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.85)', lineHeight: '12px', marginTop: '2px' }}>Founder of Goonj</div>
+          </div>
+
+          {/* Avanti Nagral */}
+          <div>
+            <div style={{ width: '70px', height: '70px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.4)', overflow: 'hidden', margin: '0 auto', backgroundColor: '#e2e8f0' }}>
+              <img src={avantiImg} alt="Avanti Nagral" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+            <div style={{ fontSize: '13px', fontWeight: 800, marginTop: '6px', lineHeight: '15px' }}>Avanti Nagral</div>
+            <div style={{ fontSize: '9px', color: 'rgba(255,255,255,0.85)', lineHeight: '12px', marginTop: '2px' }}>Singer & Entrepreneur<br />Founder & CEO, BreadButter</div>
           </div>
 
           {/* Anish and Riya */}

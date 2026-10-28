@@ -8,11 +8,13 @@ import jamImage from '../../images/jam img.jpeg'
 
 import iraImg from '../../images/irakhan.png'
 import anshuImg from '../../images/anshu.png'
+import avantiImg from '../../images/awanti.jpeg'
 import anishriyaImg from '../../images/anishriya.png'
 
 const guestAttractions = [
   { name: "Ira Khan", role: "Founder & CEO Agatsu Foundation", image: iraImg, position: "center 15%" },
   { name: "Anshu Gupta", role: "Founder of Goonj", image: anshuImg, position: "center 10%" },
+  { name: "Avanti Nagral", role: "Singer & Entrepreneur · Founder & CEO, BreadButter", image: avantiImg },
   { name: "Anish and Riya", role: "Acapella - Beat Box", image: anishriyaImg },
 ]
 
@@ -134,7 +136,7 @@ export default function Register() {
         </div>
 
         {/* Guest Cards Grid */}
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {guestAttractions.map((guest, index) => (
             <article
               className="flex flex-col overflow-hidden rounded-2xl bg-white shadow-soft"

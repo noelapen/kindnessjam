@@ -48,6 +48,7 @@ export function buildEmailHtml(name, regNo, eventInfo, orgName) {
   const safeDate = escapeHtml(eventInfo.date)
   const safeTime = escapeHtml(eventInfo.time)
   const safeVenue = escapeHtml(eventInfo.venue)
+  const safeMapLink = escapeHtml(eventInfo.mapLink || event.mapLink)
   return `
 <!DOCTYPE html>
 <html lang="en">
@@ -84,7 +85,7 @@ export function buildEmailHtml(name, regNo, eventInfo, orgName) {
         <p style="margin:0 0 10px;font-size:14px;color:#3d2060;">📅 <strong>${safeDate} · ${safeTime}</strong></p>
         <p style="margin:0 0 10px;font-size:14px;color:#3d2060;">📍 <strong>${safeVenue}</strong></p>
         <p style="margin:0 0 10px;font-size:14px;color:#3d2060;">Organisation: <strong>${safeOrgName}</strong></p>
-        <p style="margin:0;font-size:14px;color:#3d2060;">🗺️ <a href="https://maps.app.goo.gl/LQjSThtRdpREZHReA" style="color:#6425B8;font-weight:600;">Get Directions on Google Maps →</a></p>
+        <p style="margin:0;font-size:14px;color:#3d2060;">🗺️ <a href="${safeMapLink}" style="color:#6425B8;font-weight:600;">Get Directions on Google Maps →</a></p>
       </td></tr>
     </table>
 

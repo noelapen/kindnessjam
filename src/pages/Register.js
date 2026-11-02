@@ -198,10 +198,10 @@ export default function Register() {
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-ku-600">VENUE</p>
             <p className="mt-1 text-sm font-semibold text-slate-800">
-              D.P.R.C (D'Monte Park Recreation Center), St Andrews Rd, Bandra West, Mumbai
+              {event.venue}
             </p>
             <a
-              href="https://maps.app.goo.gl/LQjSThtRdpREZHReA"
+              href={event.mapLink}
               target="_blank"
               rel="noopener noreferrer"
               className="secondary-button mt-4 inline-flex items-center justify-center text-sm"

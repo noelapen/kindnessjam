@@ -1,7 +1,5 @@
 import event from '../config/event'
 
-const mapUrl = 'https://maps.app.goo.gl/LQjSThtRdpREZHReA'
-
 function DetailIcon({ type }) {
   const paths = {
     date: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 10h18" /></>,
@@ -40,7 +38,7 @@ export default function EventDetails({ ticket = false }) {
         {detailHeading('venue', 'Venue & location')}
         <p className={`mt-2 break-words text-sm font-bold leading-snug sm:text-base ${valueClass}`}>{event.venue}</p>
         <a className={`mt-3 inline-flex min-h-9 max-w-full items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold transition ${ticket ? 'border-white/25 bg-white/10 text-white hover:border-white/50 hover:bg-white/15' : 'border-ku-100 text-ku-700 hover:bg-ku-50'}`}
-          href={mapUrl} target="_blank" rel="noreferrer">
+          href={event.mapLink} target="_blank" rel="noreferrer">
           Open location in Google Maps <span aria-hidden="true">↗</span>
         </a>
       </div>

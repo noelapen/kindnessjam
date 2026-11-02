@@ -279,7 +279,7 @@ export default function TicketCard({ ticket, qrRef, cardRef }) {
                   lineHeight: '14px', 
                   color: 'rgba(255,255,255,0.95)' 
                 }}>
-                  <span style={{ fontWeight: 800 }}>Venue:</span> D'monte Park Recreation Club Ground, Bandra West, Mumbai
+                  <span style={{ fontWeight: 800 }}>Venue:</span> St. Andrew's School Ground, St. Andrew's Road, Bandra West
                 </div>
 
                 <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>

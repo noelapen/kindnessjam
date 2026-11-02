@@ -69,24 +69,24 @@ function TicketDetails() {
   if (loading) return <main className="page-shell px-4 py-12 text-center text-ku-700"><Spinner label="Loading your ticket…" /></main>
   if (error) return <main className="page-shell mx-auto max-w-xl px-4 py-12"><div className="surface p-6 text-center"><p className="text-red-800" role="alert">{error}</p><Link to="/my-ticket" className="primary-button mt-5">Recover ticket</Link></div></main>
   return (
-    <main className="page-shell mx-auto max-w-3xl px-4 py-8 sm:py-10">
+    <main className="page-shell mx-auto max-w-3xl px-3 py-6 sm:px-4 sm:py-10">
       <TicketCard ticket={ticket} cardRef={cardRef} />
       
-      {/* Downsized buttons container */}
-      <div className="mx-auto mt-5 grid max-w-md gap-2.5 sm:grid-cols-2">
+      {/* Download buttons — stack vertically on mobile, side by side on larger */}
+      <div className="mx-auto mt-4 flex max-w-md flex-col gap-2.5 px-1 sm:mt-5 sm:flex-row sm:gap-3 sm:px-0">
         <button 
-          className="primary-button py-2.5 px-4 text-sm font-semibold" 
+          className="primary-button w-full justify-center py-3 px-4 text-sm font-semibold sm:py-2.5" 
           disabled={downloading} 
           onClick={() => download(() => downloadElementPng(cardRef.current, `KindnessJam-${ticket.regNo}.png`))}
         >
-          {downloading ? 'Preparing…' : 'Download Ticket (Image)'}
+          {downloading ? 'Preparing…' : '📸 Download Image'}
         </button>
         <button 
-          className="secondary-button py-2.5 px-4 text-sm font-semibold" 
+          className="secondary-button w-full justify-center py-3 px-4 text-sm font-semibold sm:py-2.5" 
           disabled={downloading} 
           onClick={() => download(() => downloadElementPdf(cardRef.current, `KindnessJam-${ticket.regNo}.pdf`))}
         >
-          {downloading ? 'Preparing…' : 'Download Ticket (PDF)'}
+          {downloading ? 'Preparing…' : '📄 Download PDF'}
         </button>
       </div>
     </main>

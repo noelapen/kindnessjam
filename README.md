@@ -61,7 +61,7 @@ Test by registering with an email you can access, checking the `EmailStatus` cel
 
 ## Event and branding
 
-- Update date, time, and venue in [`src/config/event.js`](src/config/event.js); this is the single event-details configuration file.
+- Update public-page date, time, venue, and map link in [`src/config/event.js`](src/config/event.js). For Apps Script ticket emails, also update the `Venue` and `MapsLink` rows in the Apps Script Settings sheet; the script values are defaults only when those rows are blank or absent.
 - The root URL (`/`) is the event-team admin sign-in. After signing in, use the dashboard's per-organisation **Copy link** action to share that organisation's separate `/r/{orgCode}` registration page.
 - Add guest attraction images by placing image files in `public/` and adding entries such as `{ name: 'Guest performer', image: '/guest-performer.jpg' }` to `guestAttractions` in `src/config/event.js`. Until images are configured, registration pages show three branded image placeholders.
 - The event-team dashboard's participant-sheet link is configured as `participantSheetUrl` in the same file. The linked Google Sheet must enforce its own access permissions.

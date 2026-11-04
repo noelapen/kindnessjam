@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import QRCode from 'qrcode'
+import event from '../config/event'
 
 // Local Assets
 import logoImg from '../../images/logo.png'
@@ -275,8 +276,7 @@ export default function TicketCard({ ticket, qrRef, cardRef }) {
               lineHeight: '14px',
               color: 'rgba(255,255,255,0.92)'
             }}>
-              <div><span style={{ fontWeight: 800 }}>Venue:</span> St. Andrew's School Ground,</div>
-              <div>St. Andrew's Road, Bandra West</div>
+              <div><span style={{ fontWeight: 800 }}>Venue:</span> {event.venue}</div>
             </div>
 
             <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>

@@ -101,8 +101,8 @@ function getSettings(){
     EventName: 'Kindness Jam', 
     EventDate: 'Saturday, 28 November 2026', 
     EventTime: '3:30 PM',
-    Venue: "St. Andrew's School Ground, St. Andrew's Road, Bandra West",
-    MapsLink: 'https://maps.app.goo.gl/zipH4Hj9tZaXbvTg9',
+    Venue: "St. Andrew's College Quadrangle, St. Dominic Road, Bandra West",
+    MapsLink: 'https://maps.app.goo.gl/7DkjAHw4qs9ycX3BA',
     SenderName: 'Kindness Unlimited', 
     ReplyTo: '' 
   };
@@ -174,8 +174,8 @@ function sendTicketEmail(t){
 
     const eventDate = s.EventDate || 'Saturday, 28 November 2026';
     const eventTime = s.EventTime || '3:30 PM';
-    const venue = s.Venue || "St. Andrew's School Ground, St. Andrew's Road, Bandra West";
-    const mapsLink = s.MapsLink || 'https://maps.app.goo.gl/zipH4Hj9tZaXbvTg9';
+    const venue = s.Venue || "St. Andrew's College Quadrangle, St. Dominic Road, Bandra West";
+    const mapsLink = s.MapsLink || 'https://maps.app.goo.gl/7DkjAHw4qs9ycX3BA';
     const eventName = s.EventName || 'Kindness Jam';
     const senderName = s.SenderName || 'Kindness Unlimited';
 

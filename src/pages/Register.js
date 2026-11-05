@@ -239,7 +239,7 @@ export default function Register() {
                 <option value="">Choose your organisation</option>
                 {orgs.map((item) => (
                   <option key={item.orgCode} value={item.orgCode}>
-                    {item.orgName} · Quota: {item.quota}
+                    {item.orgName}
                     {item.open === false || item.active === false
                       ? ' — Registration closed'
                       : Number(item.remaining ?? (Number(item.quota) - Number(item.used))) <= 0
